@@ -118,6 +118,49 @@ func postData(token, url string, data map[string]interface{}) (int, []byte, erro
 	return response.StatusCode, response.ReadAll(), nil
 }
 
+func (h *Http) PostFormUrl(url string, data map[string]interface{}) ([]byte, error) {
+	token, tokenErr := h.GetAccessToken()
+	if tokenErr != nil {
+		token, tokenErr = h.ForceUpdateAccessToken()
+		if tokenErr != nil {
+			return nil, tokenErr
+		}
+	}
+
+	code, body, resErr := postFormUrlData(token, url, data)
+	if resErr != nil {
+		return body, resErr
+	}
+
+	if code == 401 {
+		token, tokenErr = h.ForceUpdateAccessToken()
+		if tokenErr != nil {
+			return nil, tokenErr
+		}
+
+		_, body, resErr = postFormUrlData(token, url, data)
+		return body, resErr
+	}
+
+	return body, resErr
+}
+
+func postFormUrlData(token, url string, data map[string]interface{}) (int, []byte, error) {
+	headers := make(map[string]string)
+	headers["Authorization"] = "bearer " + token
+
+	response, resErr := g.Client().
+		Header(headers).Timeout(60*time.Second).
+		ContentType("application/x-www-form-urlencoded").
+		Post(url, data)
+
+	if resErr != nil {
+		return 0, nil, resErr
+	}
+
+	return response.StatusCode, response.ReadAll(), nil
+}
+
 func (h *Http) Delete(url string, data map[string]interface{}) ([]byte, error) {
 	token, tokenErr := h.GetAccessToken()
 	if tokenErr != nil {

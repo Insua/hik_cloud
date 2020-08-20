@@ -5,12 +5,14 @@ import (
 	"github.com/Insua/hik_cloud/building"
 	"github.com/Insua/hik_cloud/community"
 	"github.com/Insua/hik_cloud/config"
+	"github.com/Insua/hik_cloud/consumer"
 	"github.com/Insua/hik_cloud/context"
 	"github.com/Insua/hik_cloud/credential"
 	"github.com/Insua/hik_cloud/device"
 	"github.com/Insua/hik_cloud/http"
 	"github.com/Insua/hik_cloud/permission"
 	"github.com/Insua/hik_cloud/person"
+	"github.com/Insua/hik_cloud/visitor"
 )
 
 type HikCloud struct {
@@ -53,4 +55,14 @@ func (hc *HikCloud) GetDevice() *device.Device {
 func (hc *HikCloud) GetPermission() *permission.Permission {
 	h := http.NewHttp(hc.ctx)
 	return permission.NewPermission(h)
+}
+
+func (hc *HikCloud) GetVisitor() *visitor.Visitor{
+	h := http.NewHttp(hc.ctx)
+	return visitor.NewVisitor(h)
+}
+
+func (hc *HikCloud) GetConsumer() *consumer.Consumer{
+	h := http.NewHttp(hc.ctx)
+	return consumer.NewConsumer(h)
 }
