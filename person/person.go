@@ -8,12 +8,22 @@ import (
 
 const (
 	createUrl = "https://api2.hik-cloud.com/api/v1/estate/system/person"
+	deleteUrl = "https://api2.hik-cloud.com/api/v1/estate/system/person/"
+	listUrl   = "https://api2.hik-cloud.com/api/v1/estate/system/person/actions/personInfoList"
+)
+
+type Gender int8
+
+const (
+	None   Gender = -1
+	Female Gender = 0
+	Male   Gender = 1
 )
 
 type CreateData struct {
 	UnionId          string `c:"unionId, omitempty" json:"union_id"`                   //关联ID,保留字段
 	PersonName       string `c:"personName" json:"person_name"`                        //姓名
-	Gender           int    `c:"gender, omitempty" json:"gender"`                      //性别 [-1]无 [0]女 [1]男
+	Gender           Gender `c:"gender" json:"gender"`                                 //性别 [-1]无 [0]女 [1]男
 	CredentialType   int    `c:"credentialType" json:"credential_type"`                //证件类型 [1]身份证 [2护照 [3]其他
 	CredentialNumber string `c:"credentialNumber" json:"credential_number"`            //证件号码
 	Mobile           string `c:"mobile" json:"mobile"`                                 //手机号
@@ -60,4 +70,9 @@ func (p *Person) Create(data *CreateData, rels []CommunityRel) ([]byte, error) {
 
 	body, err := p.Http.Post(createUrl, mapData)
 	return body, err
+}
+
+func (p *Person) Delete(personId string) ([]byte, error) {
+	body, err := p.Http.Delete(deleteUrl+personId, gconv.Map(nil))
+	return body, err //
 }
