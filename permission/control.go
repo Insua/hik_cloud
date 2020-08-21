@@ -3,7 +3,7 @@ package permission
 import "github.com/gogf/gf/util/gconv"
 
 const (
-	gateContolUrl = "https://api2.hik-cloud.com/api/v1/estate/entranceGuard/remoteControl/actions/gateControl"
+	gateControlUrl = "https://api2.hik-cloud.com/api/v1/estate/entranceGuard/remoteControl/actions/gateControl"
 )
 
 type Command string
@@ -22,6 +22,6 @@ type GateControlData struct {
 }
 
 func (p *Permission)GateControl(data *GateControlData) ([]byte,error) {
-	body, err := p.Http.Post(gateContolUrl, gconv.Map(data))
+	body, err := p.Http.Post(gateControlUrl, gconv.Map(data))
 	return body, err
 }

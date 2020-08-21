@@ -12,6 +12,7 @@ import (
 	"github.com/Insua/hik_cloud/http"
 	"github.com/Insua/hik_cloud/permission"
 	"github.com/Insua/hik_cloud/person"
+	"github.com/Insua/hik_cloud/property"
 	"github.com/Insua/hik_cloud/visitor"
 )
 
@@ -45,6 +46,11 @@ func (hc *HikCloud) GetBuilding() *building.Building {
 func (hc *HikCloud) GetPerson() *person.Person {
 	h := http.NewHttp(hc.ctx)
 	return person.NewPerson(h)
+}
+
+func (hc *HikCloud) GetProperty() *property.Property {
+	h := http.NewHttp(hc.ctx)
+	return property.NewProperty(h)
 }
 
 func (hc *HikCloud) GetDevice() *device.Device {
